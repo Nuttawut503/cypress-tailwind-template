@@ -16,22 +16,22 @@ export const ThemeContext = createContext<ThemeState>({
 
 export const ThemeProvider: React.FC<{children?: React.ReactNode}> = ({children}) => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(false)
-  const toggle = () => setIsDarkMode(!isDarkMode)
   const changeToDarkMode = () => {
     setIsDarkMode(true)
     window.localStorage.setItem('theme', 'dark')
+    document.documentElement.classList.add('dark')
   }
   const changeToLightMode = () => {
     setIsDarkMode(false)
     window.localStorage.setItem('theme', 'light')
+    document.documentElement.classList.remove('dark')
   }
+  const toggle = isDarkMode? changeToLightMode: changeToDarkMode
   useEffect(() => {
     if (window.localStorage.getItem('theme') === 'dark' || !window.localStorage.getItem('theme')) {
-      setIsDarkMode(true)
-      document.documentElement.classList.add('dark')
+      changeToDarkMode()
     } else {
-      setIsDarkMode(false)
-      document.documentElement.classList.remove('dark')
+      changeToLightMode()
     }
   }, [])
 
